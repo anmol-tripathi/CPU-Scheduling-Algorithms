@@ -13,7 +13,7 @@ float waitingTime = 0;
 
 };
 
-bool comparebyArrival(Process p, Process q)
+bool compareByArrival(Process p, Process q)
 {
     return p.arrivalTime<q.arrivalTime;
 }
@@ -23,9 +23,7 @@ void display(struct Process P[], int jobCount, float avgwt=0, float avgtat=0)
 	cout<<"\n\n\t\t The Process Status \n\n";
 	cout<<"\tProcess ID\tArrival Time\tBurst Time\tTurn Around Time\tWaiting Time";
 	for (int i = 0; i < jobCount; ++i)
-	{
 		cout<<"\n\t\t"<<P[i].id<<"\t\t"<<P[i].arrivalTime<<"\t\t"<<P[i].burstTime<<"\t\t"<<P[i].turnAroundTime<<"\t\t"<<P[i].waitingTime;
-	}
 	cout<<"\n\n\t\tAverage Waiting Time: "<<avgwt;
 	cout<<"\n\t\tAverage turnAroundTime Time: "<<avgtat;
 	cout<<"\n\n\n";
@@ -74,17 +72,25 @@ float RoundRobin(struct Process P[], int ch)
 
 float FirstComeFirstServed(struct Process P[])
 {
-    sort(P, P+jobCount+1, comparebyArrival); // Sorting the processes according to Arrival Time
+    sort(P, P+jobCount+1, compareByArrival); // Sorting the processes according to Arrival Time
 	int time = 0;
 	float avgwt = 0;
 	float avgtat = 0;
     for(int i=0; i<jobCount; i++)
     {
-        time += P[i].burstTime;
-        P[i].turnAroundTime = time - P[i].arrivalTime;
-        P[i].waitingTime = P[i].turnAroundTime - P[i].burstTime;
+        if(time>=P[i].arrivalTime)
+        {
+        	time += P[i].burstTime;
+        	P[i].turnAroundTime = time - P[i].arrivalTime;
+        	P[i].waitingTime = P[i].turnAroundTime - P[i].burstTime;
+        }
 
-    	avgtat += P[i].turnAroundTime;
+        else
+        {
+        	time+=1;
+        	i--;
+        }
+        avgtat += P[i].turnAroundTime;
     	avgwt += P[i].waitingTime;
     }
     avgwt = (float)(avgwt/jobCount);
