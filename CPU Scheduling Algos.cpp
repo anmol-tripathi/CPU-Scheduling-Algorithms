@@ -81,15 +81,18 @@ void getData(Process P[], int &jobCount)
 	cout<<"\n\n\t\t Process Data: ";
 	cout<<"\t How many Process?";
 	cin>>jobCount;
+	int x;
 	for(int i=0; i<jobCount; i++)
 	{
 		P[i].setId(i+1);
 		cout<<"\n\t Process ID: ";
 		cout<<P[i].getId();
 		cout<<"\n\t Enter the Process Arrival Time: ";
-		P[i].setArrivalTime();
+		cin>>x;
+		P[i].setArrivalTime(x);
 		cout<<"\n\t Enter the Process Burst Time: ";
-		P[i].setBurstTime();
+		cin>>x;
+		P[i].setBurstTime(x);
 	}
 }
 
@@ -220,22 +223,22 @@ void ShortestJobFirst(Process P[], int jobCount) // Shortest job first non preem
 				processActive[P[i].getId()-1] = true;
 			}
 
-			if(processArrived.size()!=0)
+			if(processInQueue.size()!=0)
 			{
-				Process processMinBurstTime = *min_element(processInQueue.begin(), 
+				Process processMinBurstTime = *min_element(processInQueue.begin(),
 					processInQueue.end(), compareByBurst);
-			
-			// Process Execution 
+
+			// Process Execution
 
 				time += processMinBurstTime.getBurstTime();
 				processMinBurstTime.setCompletionTime(time);
 				processMinBurstTime.setTurnAroundTime(time - processMinBurstTime.getArrivalTime());
-				processMinBurstTime.setWaitingTime(processMinBurstTime.getTurnAroundTime() 
+				processMinBurstTime.setWaitingTime(processMinBurstTime.getTurnAroundTime()
 	 		- processMinBurstTime.getBurstTime());
 
 				executedCount++;
 
-				processInQueue.erase(*min_element(processInQueue.begin(), 
+				processInQueue.erase(min_element(processInQueue.begin(),
 					processInQueue.end(), compareByBurst));
 
 				int q=0;
