@@ -8,6 +8,7 @@ struct Process{
 int id;
 int burstTime;
 int arrivalTime;
+int completionTime = 0;
 float turnAroundTime = 0;
 float waitingTime = 0;
 
@@ -21,11 +22,11 @@ bool compareByArrival(Process p, Process q)
 void display(struct Process P[], int jobCount, float avgwt=0, float avgtat=0)
 {
 	cout<<"\n\n\t\t The Process Status \n\n";
-	cout<<"\tProcess ID\tArrival Time\tBurst Time\tTurn Around Time\tWaiting Time";
+	cout<<"\tProcess ID\tArrival Time\tBurst Time\tCompletion Time\tTurn Around Time\tWaiting Time";
 	for (int i = 0; i < jobCount; ++i)
-		cout<<"\n\t\t"<<P[i].id<<"\t\t"<<P[i].arrivalTime<<"\t\t"<<P[i].burstTime<<"\t\t"<<P[i].turnAroundTime<<"\t\t"<<P[i].waitingTime;
+		cout<<"\n\t\t"<<P[i].id<<"\t\t"<<P[i].arrivalTime<<"\t\t"<<P[i].burstTime<<"\t\t"<<P[i].completionTime<<"\t\t"<<P[i].turnAroundTime<<"\t\t"<<P[i].waitingTime;
 	cout<<"\n\n\t\tAverage Waiting Time: "<<avgwt;
-	cout<<"\n\t\tAverage turnAroundTime Time: "<<avgtat;
+	cout<<"\n\t\tAverage Turn Around Time: "<<avgtat;
 	cout<<"\n\n\n";
 
 }
@@ -50,12 +51,13 @@ void getData(struct Process P[], int &jobCount)
 
 void generateRandomData(struct Process P[], int jobCount)
 {
+	srand(time(NULL));
 	cout<<"\n\n Generating Random Data";
 	for(int i=0; i<jobCount; i++)
 	{
 		P[i].id = rand()%(2001)+1000;
 		P[i].arrivalTime = rand()%(16);
-		P[i].burstTime = rand()%20;
+		P[i].burstTime = rand()%20+2;
 	}
 	cout<<"\n\n Displaying Data";
 	display(P,jobCount);
@@ -81,6 +83,7 @@ float FirstComeFirstServed(struct Process P[])
         if(time>=P[i].arrivalTime)
         {
         	time += P[i].burstTime;
+        	P[i].completionTime = time;
         	P[i].turnAroundTime = time - P[i].arrivalTime;
         	P[i].waitingTime = P[i].turnAroundTime - P[i].burstTime;
         }
