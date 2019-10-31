@@ -76,23 +76,22 @@ void display(Process P[], int jobCount, float avgwt = 0, float avgtat = 0)
 
 }
 
-// void getData(struct Process P[], int &jobCount)
-// {
-// 	cout<<"\n\n\t\t Process Data: ";
-// 	cout<<"\t How many Process?";
-// 	cin>>jobCount;
-// 	for(int i=0; i<jobCount; i++)
-// 	{
-// 		cout<<"\n Process "<<i;
-// 		cout<<"\n\t Enter the Process ID: ";
-// 		cin>>P[i].id;
-// 		cout<<"\n\t Enter the Process Arrival Time: ";
-// 		cin>>P[i].arrivalTime;
-// 		cout<<"\n\t Enter the Process Burst Time: ";
-// 		cin>>P[i].burstTime;
-// 	}
-// }
-
+void getData(Process P[], int &jobCount)
+{
+	cout<<"\n\n\t\t Process Data: ";
+	cout<<"\t How many Process?";
+	cin>>jobCount;
+	for(int i=0; i<jobCount; i++)
+	{
+		P[i].setId(i+1);
+		cout<<"\n\t Process ID: ";
+		cout<<P[i].getId();
+		cout<<"\n\t Enter the Process Arrival Time: ";
+		P[i].setArrivalTime();
+		cout<<"\n\t Enter the Process Burst Time: ";
+		P[i].setBurstTime();
+	}
+}
 
 void generateRandomData(Process P[], int jobCount)
 {
@@ -201,30 +200,67 @@ void FirstComeFirstServed(Process P[], int jobCount)
     display(P,jobCount,avgWaitTime,avgTurnAroundTime);
 }
 
-// float ShortestJobFirst(struct Process P[]) // Shortest job first non preemptive
-// {
-// 	int time = 0;
-// 	int turnAroundTime[jobCount];
-// 	int waitingTime[jobCount];
-// 	float avgwt = 0;
-// 	float avgtat = 0;
-// 	queue<Process> readyJobs;
-// 	sort(P, P+jobCount+1, compareByArrival);
-// 	while(time>=P[i].arrivalTime)
-// 	{
-// 		readyJobs.push(P[i]);
-// 		i++;
-// 	}
+void ShortestJobFirst(Process P[], int jobCount) // Shortest job first non preemptive
+{
+	cout<<"\n*** SJF ***\n";
+	int executedCount = 0, time = 0;
+	float avgWaitTime = 0, avgTurnAroundTime = 0;
+	sort(P, P+jobCount+1, compareByArrival);
+	bool processActive[jobCount] = {false};
+	Process processMinBurstTime;
+	vector <Process> processInQueue;
 
-// 	else
-// 	{
-// 		time+=1;
-// 	}
-// 	avgwt /= jobCount;
-// 	avgtat /= jobCount;
-// 	display(P,jobCount,avgwt,avgtat);
-//     return 0;
-// }
+	for(time = 0; executedCount<jobCount;)
+	{
+		for(int i=0; i<jobCount; i++)
+		{
+			if(!processActive[P[i].getId-1] && P[i].getArrivalTime()<=time)		//To check if process is executed before and also whether it has arrived or not
+			{
+				processInQueue.push_back(P[i]);				// Pushed to Process Arrived Vector
+				processActive[P[i].getId()-1] = true;
+			}
+
+			if(processArrived.size()!=0)
+			{
+				Process processMinBurstTime = *min_element(processInQueue.begin(), 
+					processInQueue.end(), compareByBurst);
+			
+			// Process Execution 
+
+				time += processMinBurstTime.getBurstTime();
+				processMinBurstTime.setCompletionTime(time);
+				processMinBurstTime.setTurnAroundTime(time - processMinBurstTime.getArrivalTime());
+				processMinBurstTime.setWaitingTime(processMinBurstTime.getTurnAroundTime() 
+	 		- processMinBurstTime.getBurstTime());
+
+				executedCount++;
+
+				processInQueue.erase(*min_element(processInQueue.begin(), 
+					processInQueue.end(), compareByBurst));
+
+				int q=0;
+				while(processMinBurstTime.getId()!=P[q].getId())
+					q++;
+				P[q] = processMinBurstTime;
+
+
+			avgWaitTime+=P[q].getWaitingTime();
+			avgTurnAroundTime+=P[q].getTurnAroundTime();
+			}
+
+			else
+				time++;
+
+		}
+
+	}
+
+	avgWaitTime /= jobCount;
+	avgTurnAroundTime /= jobCount;
+
+	display(P,jobCount,avgWaitTime,avgTurnAroundTime);
+    return 0;
+}
 
 
 int main()
