@@ -50,10 +50,10 @@ public :
 	}
 };
 
-// bool compareByArrival(Process p, Process q)
-// {
-//     return p.arrivalTime < q.arrivalTime;
-// }
+bool compareByArrival(Process p, Process q)
+{
+    return p.getArrivalTime() < q.getArrivalTime();
+}
 
 void display(Process P[], int jobCount, float avgwt = 0, float avgtat = 0)
 {
@@ -89,7 +89,6 @@ void display(Process P[], int jobCount, float avgwt = 0, float avgtat = 0)
 void generateRandomData(Process P[], int jobCount)
 {
 	srand(time(NULL));
-	cout<<"\n\n Generating Random Data";
 	for(int i=0; i<jobCount; i++)
 	{
 		P[i].setId(i+1);
@@ -99,8 +98,6 @@ void generateRandomData(Process P[], int jobCount)
 		P[i].setTurnAroundTime(0);
 		P[i].setWaitingTime(0);
 	}
-	cout<<"\n\n Displaying Data";
-	display(P,jobCount);
 
 }
 
@@ -119,35 +116,30 @@ void generateRandomData(Process P[], int jobCount)
 
 // }
 
-// float FirstComeFirstServed(struct Process P[])
-// {
-//     sort(P, P+jobCount+1, compareByArrival); // Sorting the processes according to Arrival Time
-// 	int time = 0;
-// 	float avgwt = 0;
-// 	float avgtat = 0;
-//     for(int i=0; i<jobCount; i++)
-//     {
-//         if(time>=P[i].arrivalTime)
-//         {
-//         	time += P[i].burstTime;
-//         	P[i].completionTime = time;
-//         	P[i].turnAroundTime = time - P[i].arrivalTime;
-//         	P[i].waitingTime = P[i].turnAroundTime - P[i].burstTime;
-//         }
+void FirstComeFirstServed(Process P[], int jobCount)
+{
+    
+    cout<<"\n*** FCFS ***\n";
 
-//         else
-//         {
-//         	time+=1;
-//         	i--;
-//         }
-//         avgtat += P[i].turnAroundTime;
-//     	avgwt += P[i].waitingTime;
-//     }
-//     avgwt = (float)(avgwt/jobCount);
-//     avgtat = (float)(avgtat/jobCount);
-//     display(P,jobCount,avgwt,avgtat);
-//     return 0;
-// }
+    float avgWaitTime=0, avgTurnAroundTime=0;
+
+    sort(P, P+jobCount, compareByArrival); // Sorting the processes according to Arrival Time
+	
+	for(int i = 0, prevEnd =0 ;i < jobCount; i++){
+		P[i].setCompletionTime(max(prevEnd, P[i].getArrivalTime()) + P[i].getBurstTime());
+		P[i].setTurnAroundTime(P[i].getCompletionTime() - P[i].getArrivalTime());
+		P[i].setWaitingTime(P[i].getTurnAroundTime() - P[i].getBurstTime());
+		prevEnd = P[i].getCompletionTime();
+		
+		avgWaitTime+=P[i].getWaitingTime();
+		avgTurnAroundTime+=P[i].getTurnAroundTime();
+	}
+	
+	avgWaitTime = (float)avgWaitTime/jobCount;
+	avgTurnAroundTime = (float)avgTurnAroundTime/jobCount;
+    
+    display(P,jobCount,avgWaitTime,avgTurnAroundTime);
+}
 
 // float ShortestJobFirst(struct Process P[]) // Shortest job first non preemptive
 // {
@@ -179,12 +171,16 @@ int main()
 {
 	int choice = 0, jobCount;
 	cout<<"*****Menu*****\n";
-	cout<<" 1. FCFS\n 2. SJF\n 3. Round Robin\n 4. Generate data \n 0. Exit\n";
-	cout<<"Enter your choice [0-4] : ";
+	cout<<" 1. FCFS\n 2. SJF\n 3. Round Robin\n 0. Exit\n";
+	cout<<"Enter your choice [0-3] : ";
 	cin>>choice;
+	cout<<"No. of processes :";
+	cin>>jobCount;
+	Process P[jobCount];
+	generateRandomData(P, jobCount);
 	switch(choice) {
 		case 1 : {
-			// FCFS
+			FirstComeFirstServed(P, jobCount);
 			break;
 		}
 		case 2 : {
@@ -193,13 +189,6 @@ int main()
 		}
 		case 3 : {
 			// Round Robin
-			break;
-		}
-		case 4 : {
-			cout<<"No. of processes :";
-			cin>>jobCount;
-			Process P[jobCount];
-			generateRandomData(P,jobCount);
 			break;
 		}
 		case 0: {
