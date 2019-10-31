@@ -4,14 +4,14 @@ using namespace std;
 
 int jobCount=4;
 
-struct Process{
+struct Process {
 
 int id;
 int burstTime;
 int arrivalTime;
-int completionTime = 0;
-float turnAroundTime = 0;
-float waitingTime = 0;
+int completionTime;
+float turnAroundTime;
+float waitingTime;
 
 };
 
