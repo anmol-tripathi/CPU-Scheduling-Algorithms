@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <cstdlib>
 #include <time.h>
+#include <queue>
+#include <map>
 using namespace std;
 
 class Process {
@@ -108,19 +110,71 @@ void generateRandomData(Process P[], int jobCount)
 }
 
 
-// float RoundRobin(struct Process P[])
-// {
-//     int TimeQuantum = 3; // Allocated Time Quantum
-//     int time = 0;
-// 	float avgwt = 0;
-// 	float avgtat = 0;
-	
-// 	avgwt /= jobCount;
-// 	avgtat /= jobCount;
-// 	display(P,jobCount,avgwt,avgtat);
-//     return 0;
+void RoundRobin(Process P[], int jobCount)
+{
+    cout<<"\n*** Round Robin ***\n";
 
-// }
+    int tQuantum = 2,t;
+    queue<Process> proc;
+    bool inQueue[jobCount+1];
+    int c=0;
+    for(int i = 0;i<jobCount+1;i++){
+    	inQueue[i]=false;
+    }
+    for (t = 0;  ; t++) {
+    	for (int i = 0; i < jobCount; ++i)
+    	{
+    		if(P[i].getArrivalTime()==t){
+    			proc.push(P[i]);c++;
+    		
+    			inQueue[P[i].getId()]=true;
+    		}
+    	}
+    	if(!proc.empty()) break;
+    }
+   // cout<<proc.front().getId()<<"\n";
+    map<int, int> id_compl;
+    int k=0;
+    	while(!proc.empty()){
+    		Process p = proc.front();
+    		proc.pop();
+    		int tq=min(tQuantum, p.getBurstTime());
+    		cout<<p.getId()<<"("<<tq<<"-"<< t+tq<<")-";
+    		int b=p.getBurstTime();
+    		p.setBurstTime(p.getBurstTime()-tq);
+    		t+=tq;
+    		for (int j = 0; j < jobCount; ++j)
+    		{
+    			if(!inQueue[P[j].getId()] && P[j].getArrivalTime()<=t){
+    				proc.push(P[j]);c++;
+    				inQueue[P[j].getId()]=true;
+    			}
+    		}
+
+    		if(p.getBurstTime()==0) {
+    			p.setCompletionTime(t);
+    			id_compl[p.getId()]=p.getCompletionTime();
+    		} else {
+    			proc.push(p);
+    		}
+
+    		
+    	}
+    	float avgWaitTime=0, avgTurnAroundTime=0;
+    	for (int i = 0; i < jobCount; ++i)
+    	{
+    		P[i].setCompletionTime(id_compl[P[i].getId()]);
+    		P[i].setTurnAroundTime(P[i].getCompletionTime() - P[i].getArrivalTime());
+		P[i].setWaitingTime(P[i].getTurnAroundTime() - P[i].getBurstTime());
+    	avgWaitTime+=P[i].getWaitingTime();
+		avgTurnAroundTime+=P[i].getTurnAroundTime();
+    	}
+    avgWaitTime = (float)avgWaitTime/jobCount;
+	avgTurnAroundTime = (float)avgTurnAroundTime/jobCount;
+    
+    display(P,jobCount,avgWaitTime,avgTurnAroundTime);
+
+}
 
 void FirstComeFirstServed(Process P[], int jobCount)
 {
@@ -194,7 +248,7 @@ int main()
 			break;
 		}
 		case 3 : {
-			// Round Robin
+			RoundRobin(P, jobCount);
 			break;
 		}
 		case 0: {
