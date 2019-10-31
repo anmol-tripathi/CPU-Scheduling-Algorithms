@@ -65,10 +65,17 @@ void generateRandomData(struct Process P[], int jobCount)
 }
 
 
-float RoundRobin(struct Process P[], int ch)
+float RoundRobin(struct Process P[])
 {
     int TimeQuantum = 3; // Allocated Time Quantum
-    int queue[jobCount];
+    int time = 0;
+	float avgwt = 0;
+	float avgtat = 0;
+	
+	avgwt /= jobCount;
+	avgtat /= jobCount;
+	display(P,jobCount,avgwt,avgtat);
+    return 0;
 
 }
 
@@ -102,32 +109,34 @@ float FirstComeFirstServed(struct Process P[])
     return 0;
 }
 
-float ShortestJobFirst(struct Process P[], int ch) // Shortest job first non preemptive
+float ShortestJobFirst(struct Process P[]) // Shortest job first non preemptive
 {
 	int time = 0;
-	int turnAroundTime[jobCount] = {0};
-	int waitingTime[jobCount] = {0};
 	float avgwt = 0;
 	float avgtat = 0;
-	for (int i = 0; i < jobCount; ++i)
-		avgwt = avgwt + P[i].burstTime - P[i].arrivalTime;
+	queue<Process> readyJobs;
+	sort(P, P+jobCount+1, compareByArrival);
+	while(time>=P[i].arrivalTime)
+	{
+		readyJobs.push(P[i]);
+		i++;
+	}
 
+	else
+	{
+		time+=1;
+	}
 	avgwt /= jobCount;
-    //while(time>=P[i].arrivalTime)
-    //{
-
-    //}
-
+	avgtat /= jobCount;
+	display(P,jobCount,avgwt,avgtat);
     return 0;
 }
 
 
 int main()
 {
-
-	int ch=1; // To select between average waiting time or average turnaround time
-    struct Process P[jobCount];
+	struct Process P[jobCount];
     generateRandomData(P,jobCount);
     FirstComeFirstServed(P);
-
+    ShortestJobFirst(P);
 }
