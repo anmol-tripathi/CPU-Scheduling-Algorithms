@@ -1,25 +1,26 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
 using namespace std;
 
 int jobCount=4;
 
-struct Process{
+struct Process {
 
 int id;
 int burstTime;
 int arrivalTime;
-int completionTime = 0;
-float turnAroundTime = 0;
-float waitingTime = 0;
+int completionTime;
+float turnAroundTime;
+float waitingTime;
 
 };
 
 bool compareByArrival(Process p, Process q)
 {
-    return p.arrivalTime<q.arrivalTime;
+    return p.arrivalTime < q.arrivalTime;
 }
 
-void display(struct Process P[], int jobCount, float avgwt=0, float avgtat=0)
+void display(struct Process P[], int jobCount, float avgwt = 0, float avgtat = 0)
 {
 	cout<<"\n\n\t\t The Process Status \n\n";
 	cout<<"\tProcess ID\tArrival Time\tBurst Time\tCompletion Time\tTurn Around Time\tWaiting Time";
@@ -112,6 +113,8 @@ float FirstComeFirstServed(struct Process P[])
 float ShortestJobFirst(struct Process P[]) // Shortest job first non preemptive
 {
 	int time = 0;
+	int turnAroundTime[jobCount];
+	int waitingTime[jobCount];
 	float avgwt = 0;
 	float avgtat = 0;
 	queue<Process> readyJobs;
@@ -135,7 +138,27 @@ float ShortestJobFirst(struct Process P[]) // Shortest job first non preemptive
 
 int main()
 {
-	struct Process P[jobCount];
+	int choice = 0;
+	cout<<"*****Menu*****\n";
+	cout<<" 1. FCFS\n 2. SJF\n 3. Round Robin\nEnter your choice [1-3] : ";
+	cin>>choice;
+	switch(choice) {
+		case 1 : {
+			// FCFS
+			break;
+		}
+		case 2 : {
+			// SJF
+			break;
+		}
+		case 3 : {
+			// Round Robin
+			break;
+		}
+	}
+
+	int ch=1; // To select between average waiting time or average turnaround time
+    struct Process P[jobCount];
     generateRandomData(P,jobCount);
     FirstComeFirstServed(P);
     ShortestJobFirst(P);
