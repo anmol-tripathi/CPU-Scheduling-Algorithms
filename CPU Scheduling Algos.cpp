@@ -55,8 +55,14 @@ bool compareByArrival(Process p, Process q)
     return p.getArrivalTime() < q.getArrivalTime();
 }
 
+bool compareById(Process p, Process q)
+{
+    return p.getId() < q.getId();
+}
+
 void display(Process P[], int jobCount, float avgwt = 0, float avgtat = 0)
 {
+	sort(P,P+jobCount,compareById);
 	cout<<"\n\n\t\t The Process Status \n\n";
 	cout<<"\tProcess ID\tArrival Time\tBurst Time\tCompletion Time\tTurn Around Time\tWaiting Time";
 	for (int i = 0; i < jobCount; ++i)
@@ -174,7 +180,7 @@ int main()
 	cout<<" 1. FCFS\n 2. SJF\n 3. Round Robin\n 0. Exit\n";
 	cout<<"Enter your choice [0-3] : ";
 	cin>>choice;
-	cout<<"No. of processes :";
+	cout<<"No. of processes : ";
 	cin>>jobCount;
 	Process P[jobCount];
 	generateRandomData(P, jobCount);
