@@ -160,24 +160,19 @@ void RoundRobin(Process P[], int jobCount)
 
     		
     	}
+    	float avgWaitTime=0, avgTurnAroundTime=0;
     	for (int i = 0; i < jobCount; ++i)
     	{
     		P[i].setCompletionTime(id_compl[P[i].getId()]);
     		P[i].setTurnAroundTime(P[i].getCompletionTime() - P[i].getArrivalTime());
 		P[i].setWaitingTime(P[i].getTurnAroundTime() - P[i].getBurstTime());
+    	avgWaitTime+=P[i].getWaitingTime();
+		avgTurnAroundTime+=P[i].getTurnAroundTime();
     	}
+    avgWaitTime = (float)avgWaitTime/jobCount;
+	avgTurnAroundTime = (float)avgTurnAroundTime/jobCount;
     
-
-
-
- //    int TimeQuantum = 3; // Allocated Time Quantum
- //    int time = 0;
-	// float avgwt = 0;
-	// float avgtat = 0;
-	
-	// avgwt /= jobCount;
-	// avgtat /= jobCount;
-	display(P,jobCount,0,0);
+    display(P,jobCount,avgWaitTime,avgTurnAroundTime);
 
 }
 
