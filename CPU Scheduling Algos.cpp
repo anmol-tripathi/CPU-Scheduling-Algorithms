@@ -17,10 +17,10 @@ float waitingTime;
 
 bool compareByArrival(Process p, Process q)
 {
-    return p.arrivalTime<q.arrivalTime;
+    return p.arrivalTime < q.arrivalTime;
 }
 
-void display(struct Process P[], int jobCount, float avgwt=0, float avgtat=0)
+void display(struct Process P[], int jobCount, float avgwt = 0, float avgtat = 0)
 {
 	cout<<"\n\n\t\t The Process Status \n\n";
 	cout<<"\tProcess ID\tArrival Time\tBurst Time\tCompletion Time\tTurn Around Time\tWaiting Time";
@@ -106,8 +106,8 @@ float FirstComeFirstServed(struct Process P[])
 float ShortestJobFirst(struct Process P[], int ch) // Shortest job first non preemptive
 {
 	int time = 0;
-	int turnAroundTime[jobCount] = {0};
-	int waitingTime[jobCount] = {0};
+	int turnAroundTime[jobCount];
+	int waitingTime[jobCount];
 	float avgwt = 0;
 	float avgtat = 0;
 	for (int i = 0; i < jobCount; ++i)
@@ -125,6 +125,24 @@ float ShortestJobFirst(struct Process P[], int ch) // Shortest job first non pre
 
 int main()
 {
+	int choice = 0;
+	cout<<"*****Menu*****\n";
+	cout<<" 1. FCFS\n 2. SJF\n 3. Round Robin\nEnter your choice [1-3] : ";
+	cin>>choice;
+	switch(choice) {
+		case 1 : {
+			// FCFS
+			break;
+		}
+		case 2 : {
+			// SJF
+			break;
+		}
+		case 3 : {
+			// Round Robin
+			break;
+		}
+	}
 
 	int ch=1; // To select between average waiting time or average turnaround time
     struct Process P[jobCount];
