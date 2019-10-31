@@ -4,15 +4,50 @@ using namespace std;
 
 int jobCount=4;
 
-struct Process {
-
-int id;
-int burstTime;
-int arrivalTime;
-int completionTime;
-float turnAroundTime;
-float waitingTime;
-
+class Process {
+	int id;
+	int burstTime;
+	int arrivalTime;
+	int completionTime;
+	float turnAroundTime;
+	float waitingTime;
+public :
+	int getId() {
+		return id;
+	}
+	int getBurstTime() {
+		return burstTime;
+	}
+	int getArrivalTime() {
+		return arrivalTime;
+	}
+	int getCompletionTime() {
+		return completionTime;
+	}
+	int getTurnAroundTime() {
+		return turnAroundTime;
+	}
+	int getWaitingTime() {
+		return waitingTime;
+	}
+	int setId(int id) {
+		this->id = id;
+	}
+	int setBurstTime(int burstTime) {
+		this->burstTime = burstTime;
+	}
+	int setArrivalTime(int arrivalTime) {
+		this->arrivalTime = arrivalTime;
+	}
+	int setCompletionTime(int completionTime) {
+		this->completionTime = completionTime;
+	}
+	int setTurnAroundTime(int turnAroundTime) {
+		this->turnAroundTime = turnAroundTime;
+	}
+	int setWaitingTime(int waitingTime) {
+		this->waitingTime = waitingTime;
+	}
 };
 
 bool compareByArrival(Process p, Process q)
