@@ -1,4 +1,5 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
 using namespace std;
 
 int jobCount=4;
