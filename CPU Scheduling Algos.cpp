@@ -83,9 +83,6 @@ void display(Process P[], int jobCount, float avgwt = 0, float avgtat = 0)
 
 void getData(Process P[], int &jobCount)
 {
-	cout<<"\n\n\t\t Process Data: ";
-	cout<<"\t How many Process?";
-	cin>>jobCount;
 	int x;
 	for(int i=0; i<jobCount; i++)
 	{
@@ -165,7 +162,7 @@ void RoundRobin(Process P[], int jobCount)
 	} while(jobDone!=jobCount);
 
 	float avgWaitTime=0, avgTurnAroundTime=0;
-	
+
 	for (int i = 0; i < jobCount; ++i)
 	{
 		P[i].setCompletionTime(id_compl[P[i].getId()]);
@@ -177,40 +174,40 @@ void RoundRobin(Process P[], int jobCount)
 
     avgWaitTime = (float)avgWaitTime/jobCount;
 	avgTurnAroundTime = (float)avgTurnAroundTime/jobCount;
-    
+
     display(P,jobCount,avgWaitTime,avgTurnAroundTime);
 
 }
 
 void FirstComeFirstServed(Process P[], int jobCount)
 {
-    
+
     cout<<"\n*** FCFS ***\n";
 
     float avgWaitTime=0, avgTurnAroundTime=0;
 
     sort(P, P+jobCount, compareByArrival); // Sorting the processes according to Arrival Time
-	
+
 	for(int i = 0, prevEnd =0 ;i < jobCount; i++){
 		P[i].setCompletionTime(max(prevEnd, P[i].getArrivalTime()) + P[i].getBurstTime());
 		P[i].setTurnAroundTime(P[i].getCompletionTime() - P[i].getArrivalTime());
 		P[i].setWaitingTime(P[i].getTurnAroundTime() - P[i].getBurstTime());
 		prevEnd = P[i].getCompletionTime();
-		
+
 		avgWaitTime+=P[i].getWaitingTime();
 		avgTurnAroundTime+=P[i].getTurnAroundTime();
 	}
-	
+
 	avgWaitTime = (float)avgWaitTime/jobCount;
 	avgTurnAroundTime = (float)avgTurnAroundTime/jobCount;
-    
+
     display(P,jobCount,avgWaitTime,avgTurnAroundTime);
 }
 
 void ShortestJobFirst(Process P[], int jobCount) // Shortest job first non preemptive
 {
 	cout<<"\n*** SJF ***\n";
-	
+
 	int executedCount = 0;
 	bool processActive[jobCount];
 	fill(processActive, processActive+jobCount, false);
@@ -238,7 +235,7 @@ void ShortestJobFirst(Process P[], int jobCount) // Shortest job first non preem
 	}
 
 	float avgWaitTime=0, avgTurnAroundTime=0;
-	
+
 	for (int i = 0; i < jobCount; ++i)
 	{
 		P[i].setCompletionTime(id_compl[P[i].getId()]);
@@ -250,23 +247,86 @@ void ShortestJobFirst(Process P[], int jobCount) // Shortest job first non preem
 
     avgWaitTime = (float)avgWaitTime/jobCount;
 	avgTurnAroundTime = (float)avgTurnAroundTime/jobCount;
-    
+
     display(P,jobCount,avgWaitTime,avgTurnAroundTime);
 }
 
+void ShortestJobRemainingFirst(Process P[], int jobCount)
+{
+	cout<<"\n*** SJRF ***\n";
+	int time = 0, executedCount = 0;
+	float avgTurnAroundTime = 0; avgWaitTime = 0;
+	vector <Process> processInQueue;
+	bool inQueue[jobCount] = {false};
+	map<int,int> pid_compl;
+	while(executedCount!=jobCount)
+	{
+		for(int i=0; i<jobCount; i++)
+		{
+			if((P[i].getArrivalTime()<=time)&&(inQueue[i]==false))
+			{
+				processInQueue.push_back(P[i]);
+				inQueue[i]=true;
+			}
+
+		}
+
+		if(processInQueue.size()!=0)
+		{
+			vector<Process>::iterator minPosition = min_element(processInQueue.begin(),
+				processInQueue.end(), compareByBurst);
+
+			Process temp = *minPosition;
+			temp.setBurstTime(processInQueue[minPosition].getBurstTime()-1);
+			time++;
+			if(temp.getBurstTime()==0)
+			{
+				pid_compl[temp.getId()]=time;
+				executedCount++;
+				processInQueue.erase(minPosition);
+			}
+			processInQueue[minPosition].set
+		}
+		else
+			time+=1;
+	}
+	for(int i=0; i<jobCount ; i++){
+		P[i].setCompletionTime(pid_compl[P[i].getId()]);
+		P[i].setTurnAroundTime(P[i].getCompletionTime() - P[i].getArrivalTime());
+		P[i].setWaitingTime(P[i].getTurnAroundTime() - P[i].getBurstTime());
+		avgWaitTime+=P[i].getWaitingTime();
+		avgTurnAroundTime+=P[i].getTurnAroundTime();
+	}
+	avgWaitTime = (float)avgWaitTime/jobCount;
+	avgTurnAroundTime = (float)avgTurnAroundTime/jobCount;
+
+ 	display(P,jobCount,avgWaitTime,avgTurnAroundTime);
+
+}
 
 int main()
 {
-	int choice = 0, jobCount;
+	int choice1 = 0, choice2 = 0, jobCount;
 	cout<<"\t*****CPU Scheduling Algorithms*****\n";
-	cout<<"\t 1. First Come First Served (FCFS)\n\t 2. Shortest Job First (SJF)\n\t 3. Round Robin (RR)\n\t 0. Exit\n";
-	cout<<"Enter your choice [0-3] : ";
-	cin>>choice;
+	cout<<"\t 1. First Come First Served (FCFS)\n\t 2. Shortest Job First (SJF)\n\t	3. Round Robin (RR)\n\t 4. Shortest Job Remaining First (SJRF)\n\t 0. Exit\n";
+	cout<<"Enter your choice [0-4] : ";
+	cin>>choice1;
+	cout<<"\n\t Manually enter data or Auto generated data? \n\t 1. Manually \t 2. Random Generated \n";
+	cin>>choice2;
 	cout<<"No. of processes : ";
 	cin>>jobCount;
 	Process P[jobCount];
-	generateRandomData(P, jobCount);
-	switch(choice) {
+	switch(choice2){
+		case 1: {
+			getData(P,jobCount);
+			break;
+		}
+
+		case 2: {
+			generateRandomData(P, jobCount);
+		}
+	}
+	switch(choice1) {
 		case 1 : {
 			FirstComeFirstServed(P, jobCount);
 			break;
@@ -279,11 +339,14 @@ int main()
 			RoundRobin(P, jobCount);
 			break;
 		}
+		case 4 : {
+			ShortestJobRemainingFirst(P, jobCount);
+			break;
+		}
 		case 0: {
 			exit(1);
 			break;
 		}
 	}
 	return 0;
-
 }
