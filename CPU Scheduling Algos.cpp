@@ -114,63 +114,62 @@ void generateRandomData(Process P[], int jobCount)
 
 void RoundRobin(Process P[], int jobCount)
 {
-    cout<<"\n*** Round Robin ***\n";
-
-    int tQuantum = 2,t;
-    queue<Process> proc;
+    int tQuantum;
+    cout<<"Time quantum : ";
+    cin>>tQuantum;
     bool inQueue[jobCount+1];
-    int c=0;
-    for(int i = 0;i<jobCount+1;i++){
-    	inQueue[i]=false;
-    }
-    for (t = 0;  ; t++) {
-    	for (int i = 0; i < jobCount; ++i)
-    	{
-    		if(P[i].getArrivalTime()==t){
-    			proc.push(P[i]);c++;
-    		
-    			inQueue[P[i].getId()]=true;
-    		}
-    	}
-    	if(!proc.empty()) break;
-    }
-   // cout<<proc.front().getId()<<"\n";
+  	fill(inQueue, inQueue+jobCount+1, false);
     map<int, int> id_compl;
-    int k=0;
-    	while(!proc.empty()){
-    		Process p = proc.front();
-    		proc.pop();
+	int jobDone = 0,curTime=0;
+	queue<Process> ready_queue;
+	do {
+		for (int i = 0; i < jobCount; ++i) {
+			if(!inQueue[P[i].getId()] && P[i].getArrivalTime()==curTime) {
+				ready_queue.push(P[i]);
+				inQueue[P[i].getId()]=true;
+			}
+		}
+		if(!ready_queue.empty()) {
+    		Process p = ready_queue.front();
+    		ready_queue.pop();
     		int tq=min(tQuantum, p.getBurstTime());
-    		cout<<p.getId()<<"("<<tq<<"-"<< t+tq<<")-";
+    		cout<<"p"<<p.getId()<<"->";
     		int b=p.getBurstTime();
     		p.setBurstTime(p.getBurstTime()-tq);
-    		t+=tq;
-    		for (int j = 0; j < jobCount; ++j)
+    		for (int i = curTime+1; i <= curTime+tq; ++i)
     		{
-    			if(!inQueue[P[j].getId()] && P[j].getArrivalTime()<=t){
-    				proc.push(P[j]);c++;
-    				inQueue[P[j].getId()]=true;
+    			for (int j = 0; j < jobCount; ++j)
+    			{
+    				if(!inQueue[P[j].getId()] && P[j].getArrivalTime()==i) {
+					ready_queue.push(P[j]);
+					inQueue[P[j].getId()]=true;
+					}
     			}
     		}
-
+    		curTime += tq;
     		if(p.getBurstTime()==0) {
-    			p.setCompletionTime(t);
+    			jobDone++;
+    			p.setCompletionTime(curTime);
     			id_compl[p.getId()]=p.getCompletionTime();
     		} else {
-    			proc.push(p);
+    			ready_queue.push(p);
     		}
+		} else {
+			curTime++;
+		}
+	} while(jobDone!=jobCount);
 
-    		
-    	}
-    	float avgWaitTime=0, avgTurnAroundTime=0;
-    	for (int i = 0; i < jobCount; ++i)
-    	{
-    		P[i].setCompletionTime(id_compl[P[i].getId()]);
-    		P[i].setTurnAroundTime(P[i].getCompletionTime() - P[i].getArrivalTime());
+	float avgWaitTime=0, avgTurnAroundTime=0;
+	
+	for (int i = 0; i < jobCount; ++i)
+	{
+		P[i].setCompletionTime(id_compl[P[i].getId()]);
+		P[i].setTurnAroundTime(P[i].getCompletionTime() - P[i].getArrivalTime());
 		P[i].setWaitingTime(P[i].getTurnAroundTime() - P[i].getBurstTime());
-    	avgWaitTime+=P[i].getWaitingTime();
+		avgWaitTime+=P[i].getWaitingTime();
 		avgTurnAroundTime+=P[i].getTurnAroundTime();
-    	}
+	}
+
     avgWaitTime = (float)avgWaitTime/jobCount;
 	avgTurnAroundTime = (float)avgTurnAroundTime/jobCount;
     
