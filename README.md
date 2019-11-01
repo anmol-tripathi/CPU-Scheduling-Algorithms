@@ -29,3 +29,8 @@ Processes have their respective burst time, which suggests how much CPU time a p
 ## Round Robin <br>
 
 Here, the process starvation is least as every process is executed in round robin fashion for a certain specified time quantum. Once a process is executed for the given time quantum, it leaves the CPU and gives turn to next process. This process is <b> Preemptive </b>.
+<br>
+
+## Shortest Job Remaining First <br>
+
+It is <b> Preemptive </b> implementation of Shortest job first. As soon as, a job arrives with lesser burst time than current executing process, CPU preempts the current executing process and fetching the one with lesser burst time.
