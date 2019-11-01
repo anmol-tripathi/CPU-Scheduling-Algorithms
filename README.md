@@ -8,6 +8,7 @@ Implemented following CPU scheduling algorithms in C++ with arrival time <br>
 * First Come First Served<br>
 * Shortest Job First<br>
 * Round Robin<br>
+* Shortest Job Remaining First<br>
 <br>
 Some of the features included are, <br>
 - Concept of Arrival Time <br>
@@ -33,4 +34,4 @@ Here, the process starvation is least as every process is executed in round robi
 
 ## Shortest Job Remaining First <br>
 
-It is <b> Preemptive </b> implementation of Shortest job first. As soon as, a job arrives with lesser burst time than current executing process, CPU preempts the current executing process and fetching the one with lesser burst time.
+It is a <b> preemptive </b> implementation of Shortest job first. As soon as, a job arrives with lesser burst time than current executing process, CPU preempts the current executing process and fetching the one with lesser burst time.
