@@ -210,7 +210,7 @@ void FirstComeFirstServed(Process P[], int jobCount)
 void ShortestJobFirst(Process P[], int jobCount) // Shortest job first non preemptive
 {
 	cout<<"\n*** SJF ***\n";
-
+	
 	int executedCount = 0;
 	bool processActive[jobCount];
 	fill(processActive, processActive+jobCount, false);
@@ -258,8 +258,8 @@ void ShortestJobFirst(Process P[], int jobCount) // Shortest job first non preem
 int main()
 {
 	int choice = 0, jobCount;
-	cout<<"*****Menu*****\n";
-	cout<<" 1. FCFS\n 2. SJF\n 3. Round Robin\n 0. Exit\n";
+	cout<<"\t*****CPU Scheduling Algorithms*****\n";
+	cout<<"\t 1. First Come First Served (FCFS)\n\t 2. Shortest Job First (SJF)\n\t 3. Round Robin (RR)\n\t 0. Exit\n";
 	cout<<"Enter your choice [0-3] : ";
 	cin>>choice;
 	cout<<"No. of processes : ";
@@ -285,9 +285,5 @@ int main()
 		}
 	}
 	return 0;
-	// int ch=1; // To select between average waiting time or average turnaround time
- //    struct Process P[jobCount];
- //    generateRandomData(P,jobCount);
- //    FirstComeFirstServed(P);
- //    ShortestJobFirst(P);
+
 }
