@@ -217,7 +217,7 @@ void ShortestJobFirst(Process P[], int jobCount) // Shortest job first non preem
 	{
 		for(int i=0; i<jobCount; i++)
 		{
-			if(!processActive[P[i].getId-1] && P[i].getArrivalTime()<=time)		//To check if process is executed before and also whether it has arrived or not
+			if(!processActive[P[i].getId()-1] && P[i].getArrivalTime()<=time)		//To check if process is executed before and also whether it has arrived or not
 			{
 				processInQueue.push_back(P[i]);				// Pushed to Process Arrived Vector
 				processActive[P[i].getId()-1] = true;
@@ -262,7 +262,6 @@ void ShortestJobFirst(Process P[], int jobCount) // Shortest job first non preem
 	avgTurnAroundTime /= jobCount;
 
 	display(P,jobCount,avgWaitTime,avgTurnAroundTime);
-    return 0;
 }
 
 
