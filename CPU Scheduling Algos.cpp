@@ -255,9 +255,10 @@ void ShortestJobRemainingFirst(Process P[], int jobCount)
 {
 	cout<<"\n*** SJRF ***\n";
 	int time = 0, executedCount = 0;
-	float avgTurnAroundTime = 0; avgWaitTime = 0;
+	float avgTurnAroundTime = 0, avgWaitTime = 0;
 	vector <Process> processInQueue;
-	bool inQueue[jobCount] = {false};
+	bool inQueue[jobCount];
+	fill(inQueue, inQueue+jobCount, false);
 	map<int,int> pid_compl;
 	while(executedCount!=jobCount)
 	{
@@ -275,20 +276,19 @@ void ShortestJobRemainingFirst(Process P[], int jobCount)
 		{
 			vector<Process>::iterator minPosition = min_element(processInQueue.begin(),
 				processInQueue.end(), compareByBurst);
-
-			Process temp = *minPosition;
-			temp.setBurstTime(processInQueue[minPosition].getBurstTime()-1);
+			(*minPosition).setBurstTime((*minPosition).getBurstTime()-1);
 			time++;
-			if(temp.getBurstTime()==0)
+			if((*minPosition).getBurstTime()==0)
 			{
-				pid_compl[temp.getId()]=time;
+				pid_compl[(*minPosition).getId()]=time;
 				executedCount++;
 				processInQueue.erase(minPosition);
 			}
-			processInQueue[minPosition].set
+			
 		}
-		else
-			time+=1;
+		else {
+			time++;
+		}
 	}
 	for(int i=0; i<jobCount ; i++){
 		P[i].setCompletionTime(pid_compl[P[i].getId()]);
@@ -308,7 +308,7 @@ int main()
 {
 	int choice1 = 0, choice2 = 0, jobCount;
 	cout<<"\t*****CPU Scheduling Algorithms*****\n";
-	cout<<"\t 1. First Come First Served (FCFS)\n\t 2. Shortest Job First (SJF)\n\t	3. Round Robin (RR)\n\t 4. Shortest Job Remaining First (SJRF)\n\t 0. Exit\n";
+	cout<<"\t 1. First Come First Served (FCFS)\n\t 2. Shortest Job First (SJF)\n\t 3. Round Robin (RR)\n\t 4. Shortest Job Remaining First (SJRF)\n\t 0. Exit\n";
 	cout<<"Enter your choice [0-4] : ";
 	cin>>choice1;
 	cout<<"\n\t Manually enter data or Auto generated data? \n\t 1. Manually \t 2. Random Generated \n";
