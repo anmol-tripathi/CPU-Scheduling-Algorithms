@@ -19,7 +19,7 @@ Some of the features included are, <br>
 
 ## First Come First Served <br>
 
-As the name suggests, the process which arrives first, will be served first.This scheduling algorithm is <b> Non- Preemptive </b>. Here, processes are sorted by their respective arrival time and then are executed. The process with lowest arrival time will get priority in execution.<br>
+As the name suggests, the process which arrives first, will be served first.This scheduling algorithm is <b> non- preemptive </b>. Here, processes are sorted by their respective arrival time and then are executed. The process with lowest arrival time will get priority in execution.<br>
 <br>
 
 ## Shortest Job First <br>
@@ -34,4 +34,4 @@ Here, the process starvation is least as every process is executed in round robi
 
 ## Shortest Job Remaining First <br>
 
-It is a <b> preemptive </b> implementation of Shortest job first. As soon as, a job arrives with lesser burst time than current executing process, CPU preempts the current executing process and fetching the one with lesser burst time.
+It is the <b> preemptive </b> implementation of the algorithm Shortest job first. As soon as, a job arrives having lesser burst time than the current executing process, CPU preempts the current executing process and fetchs the one with the least burst time.
