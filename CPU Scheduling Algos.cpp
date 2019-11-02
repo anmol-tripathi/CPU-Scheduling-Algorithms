@@ -116,8 +116,9 @@ void generateRandomData(Process P[], int jobCount)
 
 void RoundRobin(Process P[], int jobCount)
 {
+	cout<<"\n\t*** Round Robin ***\n";
     int tQuantum;
-    cout<<"Time quantum : ";
+    cout<<"\t Time quantum : ";
     cin>>tQuantum;
     bool inQueue[jobCount+1];
   	fill(inQueue, inQueue+jobCount+1, false);
@@ -135,7 +136,7 @@ void RoundRobin(Process P[], int jobCount)
     		Process p = ready_queue.front();
     		ready_queue.pop();
     		int tq=min(tQuantum, p.getBurstTime());
-    		cout<<"p"<<p.getId()<<"->";
+    		// cout<<"p"<<p.getId()<<"->";
     		int b=p.getBurstTime();
     		p.setBurstTime(p.getBurstTime()-tq);
     		for (int i = curTime+1; i <= curTime+tq; ++i)
@@ -182,7 +183,7 @@ void RoundRobin(Process P[], int jobCount)
 void FirstComeFirstServed(Process P[], int jobCount)
 {
 
-    cout<<"\n*** FCFS ***\n";
+    cout<<"\n\t*** FCFS ***\n";
 
     float avgWaitTime=0, avgTurnAroundTime=0;
 
@@ -206,7 +207,7 @@ void FirstComeFirstServed(Process P[], int jobCount)
 
 void ShortestJobFirst(Process P[], int jobCount) // Shortest job first non preemptive
 {
-	cout<<"\n*** SJF ***\n";
+	cout<<"\n\t*** SJF ***\n";
 
 	int executedCount = 0;
 	bool processActive[jobCount];
@@ -253,11 +254,12 @@ void ShortestJobFirst(Process P[], int jobCount) // Shortest job first non preem
 
 void ShortestJobRemainingFirst(Process P[], int jobCount)
 {
-	cout<<"\n*** SJRF ***\n";
+	cout<<"\n\t*** SJRF ***\n";
 	int time = 0, executedCount = 0;
-	float avgTurnAroundTime = 0; avgWaitTime = 0;
+	float avgTurnAroundTime = 0, avgWaitTime = 0;
 	vector <Process> processInQueue;
-	bool inQueue[jobCount] = {false};
+	bool inQueue[jobCount];
+	fill(inQueue, inQueue+jobCount, false);
 	map<int,int> pid_compl;
 	while(executedCount!=jobCount)
 	{
@@ -275,20 +277,19 @@ void ShortestJobRemainingFirst(Process P[], int jobCount)
 		{
 			vector<Process>::iterator minPosition = min_element(processInQueue.begin(),
 				processInQueue.end(), compareByBurst);
-
-			Process temp = *minPosition;
-			temp.setBurstTime(processInQueue[minPosition].getBurstTime()-1);
+			(*minPosition).setBurstTime((*minPosition).getBurstTime()-1);
 			time++;
-			if(temp.getBurstTime()==0)
+			if((*minPosition).getBurstTime()==0)
 			{
-				pid_compl[temp.getId()]=time;
+				pid_compl[(*minPosition).getId()]=time;
 				executedCount++;
 				processInQueue.erase(minPosition);
 			}
-			processInQueue[minPosition].set
+			
 		}
-		else
-			time+=1;
+		else {
+			time++;
+		}
 	}
 	for(int i=0; i<jobCount ; i++){
 		P[i].setCompletionTime(pid_compl[P[i].getId()]);
@@ -306,46 +307,58 @@ void ShortestJobRemainingFirst(Process P[], int jobCount)
 
 int main()
 {
-	int choice1 = 0, choice2 = 0, jobCount;
-	cout<<"\t*****CPU Scheduling Algorithms*****\n";
-	cout<<"\t 1. First Come First Served (FCFS)\n\t 2. Shortest Job First (SJF)\n\t	3. Round Robin (RR)\n\t 4. Shortest Job Remaining First (SJRF)\n\t 0. Exit\n";
-	cout<<"Enter your choice [0-4] : ";
-	cin>>choice1;
-	cout<<"\n\t Manually enter data or Auto generated data? \n\t 1. Manually \t 2. Random Generated \n";
-	cin>>choice2;
-	cout<<"No. of processes : ";
-	cin>>jobCount;
-	Process P[jobCount];
-	switch(choice2){
-		case 1: {
-			getData(P,jobCount);
-			break;
+	int schedulingType, dataInputChoice, jobCount;
+	while(1) {
+		
+		cout<<"\n\t*****CPU Scheduling Algorithms*****\n";
+		
+		cout<<"\t 1. First Come First Served (FCFS)\n\t 2. Shortest Job First (SJF)\n\t 3. Round Robin (RR)\n\t 4. Shortest Job Remaining First (SJRF)\n\t 0. Exit\n";
+		cout<<"\n\t Enter your choice [0-4] : ";
+		
+		cin>>schedulingType;
+		
+		if(schedulingType == 0) {
+			exit(1);
+		}
+		
+		cout<<"\n\t Manually enter data or Auto generated data? \n\t 1. Manually \t 2. Random Generated \n";
+		cout<<"\n\t Enter your choice [1/2] : ";
+		
+		cin>>dataInputChoice;
+		
+		cout<<"\t No. of processes : ";
+		cin>>jobCount;
+		
+		Process P[jobCount];
+		
+		switch(dataInputChoice){
+			case 1: {
+				getData(P,jobCount);
+				break;
+			}
+
+			case 2: {
+				generateRandomData(P, jobCount);
+			}
 		}
 
-		case 2: {
-			generateRandomData(P, jobCount);
-		}
-	}
-	switch(choice1) {
-		case 1 : {
-			FirstComeFirstServed(P, jobCount);
-			break;
-		}
-		case 2 : {
-			ShortestJobFirst(P, jobCount);
-			break;
-		}
-		case 3 : {
-			RoundRobin(P, jobCount);
-			break;
-		}
-		case 4 : {
-			ShortestJobRemainingFirst(P, jobCount);
-			break;
-		}
-		case 0: {
-			exit(1);
-			break;
+		switch(schedulingType) {
+			case 1 : {
+				FirstComeFirstServed(P, jobCount);
+				break;
+			}
+			case 2 : {
+				ShortestJobFirst(P, jobCount);
+				break;
+			}
+			case 3 : {
+				RoundRobin(P, jobCount);
+				break;
+			}
+			case 4 : {
+				ShortestJobRemainingFirst(P, jobCount);
+				break;
+			}
 		}
 	}
 	return 0;
