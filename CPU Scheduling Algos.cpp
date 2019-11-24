@@ -285,7 +285,7 @@ void ShortestJobRemainingFirst(Process P[], int jobCount)
 				executedCount++;
 				processInQueue.erase(minPosition);
 			}
-			
+
 		}
 		else {
 			time++;
@@ -309,28 +309,28 @@ int main()
 {
 	int schedulingType, dataInputChoice, jobCount;
 	while(1) {
-		
+
 		cout<<"\n\t*****CPU Scheduling Algorithms*****\n";
-		
-		cout<<"\t 1. First Come First Served (FCFS)\n\t 2. Shortest Job First (SJF)\n\t 3. Round Robin (RR)\n\t 4. Shortest Job Remaining First (SJRF)\n\t 0. Exit\n";
-		cout<<"\n\t Enter your choice [0-4] : ";
-		
+
+		cout<<"\t 1. First Come First Served (FCFS)\n\t 2. Shortest Job First (SJF)\n\t 3. Round Robin (RR)\n\t 4. Shortest Job Remaining First (SJRF)\n\t 5. All\n\t 0. Exit\n";
+		cout<<"\n\t Enter your choice [0-5] : ";
+
 		cin>>schedulingType;
-		
+
 		if(schedulingType == 0) {
 			exit(1);
 		}
-		
+
 		cout<<"\n\t Manually enter data or Auto generated data? \n\t 1. Manually \t 2. Random Generated \n";
 		cout<<"\n\t Enter your choice [1/2] : ";
-		
+
 		cin>>dataInputChoice;
-		
+
 		cout<<"\t No. of processes : ";
 		cin>>jobCount;
-		
+
 		Process P[jobCount];
-		
+
 		switch(dataInputChoice){
 			case 1: {
 				getData(P,jobCount);
@@ -357,6 +357,13 @@ int main()
 			}
 			case 4 : {
 				ShortestJobRemainingFirst(P, jobCount);
+				break;
+			}
+			case 5 : {
+                FirstComeFirstServed(P, jobCount);
+                ShortestJobFirst(P, jobCount);
+                RoundRobin(P, jobCount);
+                ShortestJobRemainingFirst(P, jobCount);
 				break;
 			}
 		}
