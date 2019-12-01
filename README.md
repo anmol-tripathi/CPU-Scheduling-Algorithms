@@ -35,3 +35,12 @@ Here, the process starvation is least as every process is executed in round robi
 ## Shortest Job Remaining First <br>
 
 It is the <b> preemptive </b> implementation of the algorithm Shortest job first. As soon as, a job arrives having lesser burst time than the current executing process, CPU preempts the current executing process and fetchs the one with the least burst time.
+
+## Working Snapshots <br>
+<br>
+<img src="working snaps/img1.jpg">
+<br>
+<img src="working snaps/img2.jpg">
+<br>
+<img src="working snaps/img3.jpg">
+<br>
