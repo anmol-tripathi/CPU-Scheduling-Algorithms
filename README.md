@@ -38,9 +38,9 @@ It is the <b> preemptive </b> implementation of the algorithm Shortest job first
 
 ## Working Snapshots <br>
 <br>
-<img src="working snaps/img1.jpg">
+<img src="working snaps/img1.JPG">
 <br>
-<img src="working snaps/img2.jpg">
+<img src="working snaps/img2.JPG">
 <br>
-<img src="working snaps/img3.jpg">
+<img src="working snaps/img3.JPG">
 <br>
