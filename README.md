@@ -1,4 +1,4 @@
-# CPU Scheduling Algorithms in C++
+# CPU Scheduling Algorithms
 
 <img src="https://img.shields.io/badge/Operating Systems-CPU Scheduling Algorithm-<green>"> <img src="https://img.shields.io/static/v1?label=Language&message=CPP&color=blue">
 <br>
